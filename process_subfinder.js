@@ -14,17 +14,6 @@ let DomainDB = null
 let IpDB = null
 
 
-function ValidateIPaddress(ipaddress) 
-{
- if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(myForm.emailAddr.value))
-  {
-    return (true)
-  }
-alert("You have entered an invalid IP address!")
-return (false)
-}
-
-
 
 function ValidateIPaddress(str){
   // Regular expression to check if string is a IP address
@@ -179,6 +168,8 @@ mail.plesk0.occentus.net [178.255.226.200]
                     ip.push(ips[i])
                 }
             }
+
+            console.log(ip,output)
 
             if(ip &&  ip.length > 0) {
 
