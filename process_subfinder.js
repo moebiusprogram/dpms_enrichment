@@ -135,7 +135,7 @@ const process_data = async () => {
             const output = execSync( subfinderCommand, { encoding: 'utf-8' }); // the default is 'buffer'
             //const output = execSync('nslookup -type=NS earth.google.com', { encoding: 'utf-8' }); // the default is 'buffer'
 
-            const ips = process_subfinder(output)
+            const ips = await process_subfinder(output)
 
             const ip = []
 
