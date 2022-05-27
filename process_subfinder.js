@@ -139,62 +139,29 @@ const process_data = async () => {
 
             const ips = await process_subfinder(output)
 
-            const ip = []
-
-
 
             for (var i = 0; i < ips.length; i++) {
 
                 const domainName = Object.keys(ips[i])
 
-
                 console.log(domainName[0], ips[i][domainName[0]])
+            
+                if( !ValidateIPaddress( ips[i][domainName[0]])) continue
 
-                /*
-                if(domainName !== "" && ValidateIPaddress( ips[i][domainName] ) ) {
-                    ip.push( ips[i][domainName] )
-                }*/
+                let dnsRecord = DomainDB({ domainName:  domainName[0], ip: [ ips[i][domainName[0]] ] })
+                await dnsRecord.save()
+
+                let ipRecord = IpDB({ ip: ips[i][domainName[0]], domainName: domainName[0] })
+                await ipRecord.save()
             }
 
-            /*
+            
             let result = await DomainDB.update({ "domainName": domain.domainName }
              ,{$set:{"sub": ips }},
               {upsert:false}
-            ).exec()*/
+            ).exec()
 
-            if(ip &&  ip.length > 0) {
-
-                //console.log(ip,ips)
-                console.log(subfinderCommand)
-                //console.log(output, typeof output)
-                //console.log("Doc",index)
-
-                for (var j = 0; j < ip.length; j++) {
-
-                    //let ipRecord = IpDB({ ip: ip[j], domainName: domain.domainName })
-                    //await ipRecord.save()
-
-                    //console.log("result",ipRecord)
-                    console.log("result", ip[j] )
-                }
-            }
-
-
-
-            for (var i = 0; i < ips.length; i++) {
-                const domainName = ips[i]
-            }
-
-
-            //let ipRecord = DomainDB({ domainName: domain.domainName  })
-            //await ipRecord.save()
-
-            /*
-            let result = await DomainDB.update({ "domainName": domain.domainName }
-             ,{$set:{"ip": ip }},
-              {upsert:false}
-            ).exec()*/
-
+         
         } catch (e) {
             console.log(e)
         }
