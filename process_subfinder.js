@@ -161,7 +161,8 @@ const process_data = async () => {
                     //let ipRecord = IpDB({ ip: ip[j], domainName: domain.domainName })
                     //await ipRecord.save()
 
-                    console.log("result",ipRecord)
+                    //console.log("result",ipRecord)
+                    console.log("result", ip[j] )
                 }
             }
 
