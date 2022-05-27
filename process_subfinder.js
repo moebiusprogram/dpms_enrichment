@@ -148,7 +148,7 @@ const process_data = async () => {
                 const domainName = Object.keys(ips[i])
 
 
-                console.log(domainName,ips[i],ips[i][domainName])
+                console.log(domainName[0], ips[i][domainName[0]])
 
                 /*
                 if(domainName !== "" && ValidateIPaddress( ips[i][domainName] ) ) {
