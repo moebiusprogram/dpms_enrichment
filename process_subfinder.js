@@ -58,6 +58,7 @@ connectMongoose = async () => {
         console.log(users)
 
         process_data()
+        
 
     }).catch(err => {
         console.log('Error connecting with local database.Exiting', err)
@@ -84,6 +85,40 @@ setupMongoose = async () => {
 let id = 0
 let index = 0
 
+
+const process_subfinder = async (data) => {
+
+    const dataArray = data.split(/\r?\n/)
+
+    const processed_data = []
+
+    for (var i = 0; i < dataArray.length; i++) {
+        const line = dataArray[i]
+
+        if(line === ""){
+            continue
+        }
+
+        const start = line.indexOf("[")
+        const end = line.indexOf("]")
+
+        const ip = line.slice(start + 1, end)
+
+        const domain = line.slice(0,start - 1)
+
+        //console.log("result",ip,domain)
+
+        processed_data.push({ [domain]: ip})
+    }
+
+
+    console.log("processed", processed_data)
+
+    return processed_data
+}
+
+
+
 const process_data = async () => {
 
     //await DomainDB.find().then(  )
@@ -92,64 +127,7 @@ const process_data = async () => {
 
         index++
 
-        const data = `ntp.occentus.net [178.255.228.77]
-sdns4.occentus.net [88.99.91.108]
-sdns2.occentus.net [178.255.228.67]
-sdns3.occentus.net [91.121.19.9]
-intranet.occentus.net [178.255.226.197]
-mail.occentus.net [178.255.228.71]
-connect.occentus.net [178.255.225.30]
-webmail.occentus.net [178.255.228.71]
-monitor.occentus.net [213.162.217.6]
-pdns.occentus.net [178.255.226.10]
-desarrollo.occentus.net [178.255.225.181]
-soporte.occentus.net [178.255.228.76]
-dnstest.occentus.net [178.255.225.65]
-dev.occentus.net [178.255.228.76]
-mail.plesk5.occentus.net [178.255.226.205]
-git.occentus.net [178.255.228.74]
-gestion.occentus.net [213.162.217.223]
-devmarvin.occentus.net [178.255.225.233]
-mail.pre.occentus.net [178.255.228.76]
-plesk0.occentus.net [178.255.226.200]
-www.occentus.net [178.255.228.75]
-occentus.net [178.255.228.75]
-gmonitor.occentus.net [178.255.225.100]
-ox.occentus.net [178.255.225.37]
-corp.occentus.net [178.255.228.76]
-mdns.occentus.net [88.99.91.108]
-plesk2.occentus.net [178.255.226.202]
-vlc-s1d09-occ-c16.occentus.net [178.255.226.16]
-plesk4.occentus.net [178.255.226.204]
-mail.plesk2.occentus.net [178.255.226.202]
-erp.occentus.net [178.255.228.72]
-mail.plesk3.occentus.net [178.255.226.203]
-cerebro.occentus.net [178.255.228.76]
-plesk6.occentus.net [178.255.226.206]
-plesk1.occentus.net [178.255.226.201]
-mail.plesk1.occentus.net [178.255.226.201]
-vlc-s1d09-occ-c05.occentus.net [178.255.226.15]
-geo.occentus.net [178.255.225.11]
-plesk3.occentus.net [178.255.226.203]
-sdns1.occentus.net [178.255.225.10]
-dns2.occentus.net [178.255.225.68]
-old.occentus.net [178.255.228.76]
-whmcs.occentus.net [178.255.228.66]
-www.plesk1.occentus.net [178.255.226.201]
-pre.occentus.net [178.255.228.76]
-mail.old.occentus.net [178.255.228.76]
-dns.occentus.net [178.255.225.67]
-ftp.occentus.net [178.255.228.75]
-marvin.occentus.net [178.255.228.66]
-mail.plesk6.occentus.net [178.255.226.206]
-www.old.occentus.net [178.255.228.76]
-plesk5.occentus.net [178.255.226.205]
-sdns.occentus.net [178.255.225.10]
-mail.cerebro.occentus.net [178.255.228.76]
-mail.plesk4.occentus.net [178.255.226.204]
-mail.plesk0.occentus.net [178.255.226.200]
-`
-
+        
 
         try {
 
@@ -157,7 +135,7 @@ mail.plesk0.occentus.net [178.255.226.200]
             const output = execSync( subfinderCommand, { encoding: 'utf-8' }); // the default is 'buffer'
             //const output = execSync('nslookup -type=NS earth.google.com', { encoding: 'utf-8' }); // the default is 'buffer'
 
-            const ips = output.split(/\r?\n/)
+            const ips = process_subfinder(output)
 
             const ip = []
 
@@ -169,7 +147,7 @@ mail.plesk0.occentus.net [178.255.226.200]
                 }
             }
 
-            console.log(ip,output)
+            console.log(ip,ips)
 
             if(ip &&  ip.length > 0) {
 
