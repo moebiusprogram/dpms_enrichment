@@ -88,6 +88,8 @@ let index = 0
 
 const process_subfinder = async (data) => {
 
+    if(!data || data.length === 0 || data[0] === "") return
+
     const dataArray = data.split(/\r?\n/)
 
     const processed_data = []
@@ -147,10 +149,9 @@ const process_data = async () => {
                 }
             }
 
-            console.log(ip,ips)
-
             if(ip &&  ip.length > 0) {
 
+                console.log(ip,ips)
                 console.log(subfinderCommand)
                 console.log(output, typeof output)
                 console.log("Doc",index,domain)
