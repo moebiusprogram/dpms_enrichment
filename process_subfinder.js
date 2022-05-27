@@ -141,20 +141,33 @@ const process_data = async () => {
 
             const ip = []
 
-            for (var i = 0; i < ips.length; i++) {
-                ips[i]
 
-                if(ips[i] !== "" && ValidateIPaddress(ips[i]) ) {
-                    ip.push(ips[i])
-                }
+
+            for (var i = 0; i < ips.length; i++) {
+
+                const domainName = Object.keys(ips[i])
+
+
+                console.log(domainName,ips[i],ips[i][domainName])
+
+                /*
+                if(domainName !== "" && ValidateIPaddress( ips[i][domainName] ) ) {
+                    ip.push( ips[i][domainName] )
+                }*/
             }
+
+            /*
+            let result = await DomainDB.update({ "domainName": domain.domainName }
+             ,{$set:{"sub": ips }},
+              {upsert:false}
+            ).exec()*/
 
             if(ip &&  ip.length > 0) {
 
-                console.log(ip,ips)
+                //console.log(ip,ips)
                 console.log(subfinderCommand)
-                console.log(output, typeof output)
-                console.log("Doc",index,domain)
+                //console.log(output, typeof output)
+                //console.log("Doc",index)
 
                 for (var j = 0; j < ip.length; j++) {
 
@@ -165,6 +178,16 @@ const process_data = async () => {
                     console.log("result", ip[j] )
                 }
             }
+
+
+
+            for (var i = 0; i < ips.length; i++) {
+                const domainName = ips[i]
+            }
+
+
+            //let ipRecord = DomainDB({ domainName: domain.domainName  })
+            //await ipRecord.save()
 
             /*
             let result = await DomainDB.update({ "domainName": domain.domainName }
