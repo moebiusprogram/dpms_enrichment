@@ -148,15 +148,19 @@ const process_data = async () => {
             
                 if( !ValidateIPaddress( ips[i][domainName[0]])) continue
 
-                let dnsRecord = DomainDB({ domainName:  domainName[0], ip: [ ips[i][domainName[0]] ] })
-                await dnsRecord.save()
+                try{
+                    let dnsRecord = DomainDB({ domainName:  domainName[0], ip: [ ips[i][domainName[0]] ] })
+                    await dnsRecord.save()
+                } catch(e) {
+                    console.log("E",e)
+                }
 
                 let ipRecord = IpDB({ ip: ips[i][domainName[0]], domainName: domainName[0] })
                 await ipRecord.save()
             }
 
             
-            let result = await DomainDB.update({ "domainName": domain.domainName }
+            let result = await DomainDB.updateOne({ "domainName": domain.domainName }
              ,{$set:{"sub": ips }},
               {upsert:false}
             ).exec()
