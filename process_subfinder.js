@@ -88,7 +88,9 @@ let index = 0
 
 const process_subfinder = async (data) => {
 
-    if(!data || data.length === 0 || data[0] === "") return
+    if(!data) return
+
+    if(data.length === 0 || data[0] === "") return
 
     const dataArray = data.split(/\r?\n/)
 
