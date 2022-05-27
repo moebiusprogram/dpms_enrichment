@@ -152,7 +152,7 @@ const process_data = async () => {
                     let dnsRecord = DomainDB({ domainName:  domainName[0], ip: [ ips[i][domainName[0]] ] })
                     await dnsRecord.save()
                 } catch(e) {
-                    console.log("E:" e.code)
+                    console.log("E:",e.code)
                 }
 
                 let ipRecord = IpDB({ ip: ips[i][domainName[0]], domainName: domainName[0] })
