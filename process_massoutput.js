@@ -133,7 +133,7 @@ const process_data = async () => {
                 }
             }
 
-            let result = await DomainDB.update({ "domainName": domain.domainName }
+            let result = await DomainDB.updateOne({ "domainName": domain.domainName }
              ,{$set:{"ip": ip }},
               {upsert:false}
             ).exec()
