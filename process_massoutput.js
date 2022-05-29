@@ -14,27 +14,12 @@ let DomainDB = null
 let IpDB = null
 
 
-function ValidateIPaddress(ipaddress) 
-{
- if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(myForm.emailAddr.value))
-  {
-    return (true)
-  }
-alert("You have entered an invalid IP address!")
-return (false)
-}
-
-
-
 function ValidateIPaddress(str){
   // Regular expression to check if string is a IP address
   const regexExp = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/gi;
 
   return regexExp.test(str);
 }
-
-
-
 
 
 /* Start Mongoose */
@@ -99,14 +84,22 @@ const process_data = async () => {
 
     //await DomainDB.find().then(  )
 
-    for await (const domain of DomainDB.find()) {
+
+    const cursor = DomainDB.find().cursor()
+
+    //cursor.limit(50)
+    cursor.addCursorFlag("noCursorTimeout",true)
+    //console.log(cursor)
+
+    cursor.on('data', function(domain) {
+
+        console.log(doc)
 
         index++
 
         try {
             const digCommand = `dig +short A ${ domain.domainName }`
             const output = execSync( digCommand, { encoding: 'utf-8' }); // the default is 'buffer'
-            //const output = execSync('nslookup -type=NS earth.google.com', { encoding: 'utf-8' }); // the default is 'buffer'
 
             const ips = output.split(/\r?\n/)
 
@@ -150,8 +143,15 @@ const process_data = async () => {
         } catch (e) {
             console.log(e)
         }
-    }
+    });
+    cursor.on('close', ()=>{
+        console.log("close cursor")
+    });
 
+    
+    for await (const domain of DomainDB.find()) {
+
+    }
 
     /*
     let result = await DomainDB.update({ "domainName": { "$regex": this.term, "$options": "i" } }
