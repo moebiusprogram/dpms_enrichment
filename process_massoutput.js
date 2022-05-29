@@ -91,7 +91,7 @@ const process_data = async () => {
     cursor.addCursorFlag("noCursorTimeout",true)
     //console.log(cursor)
 
-    cursor.on('data', function(domain) {
+    cursor.on('data', async (domain) => {
 
         console.log(doc)
 
