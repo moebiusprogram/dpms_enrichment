@@ -93,8 +93,6 @@ const process_data = async () => {
 
     cursor.on('data', async (domain) => {
 
-        console.log(doc)
-
         index++
 
         try {
