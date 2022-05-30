@@ -117,20 +117,11 @@ const process_subfinder = async (data) => {
 
 const process_data = async () => {
 
-    //await DomainDB.find().then(  )
-
-
     const cursor = DomainDB.find().cursor()
-
-    //cursor.limit(50)
     cursor.addCursorFlag("noCursorTimeout",true)
-    //console.log(cursor)
-
     cursor.on('data', async (domain) => {
 
         index++
-
-        
 
         try {
 
@@ -170,4 +161,9 @@ const process_data = async () => {
         } catch (e) {
             console.log(e)
         }
+    });
+    cursor.on('close', ()=>{
+        console.log("close cursor")
+    });
+
 }
