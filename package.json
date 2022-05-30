@@ -1,8 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "start": "node process_massoutput.js"
-    "subfinder": "node process_subfinder.js"
+    "start": "node process_massoutput.js",
+    "subfinder": "node process_subfinder.js",
+    "last": "node process_last.js",
   },
   "dependencies": {
     "dotenv": "^16.0.1",
