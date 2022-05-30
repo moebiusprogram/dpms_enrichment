@@ -3,8 +3,8 @@
   "scripts": {
     "start": "node process_massoutput.js",
     "subfinder": "node process_subfinder.js",
-    "last": "node process_last.js",
-  },
+    "last": "node process_last.js"
+  },                
   "dependencies": {
     "dotenv": "^16.0.1",
     "mongoose": "^6.3.2",
