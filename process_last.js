@@ -90,11 +90,6 @@ const process_data = async () => {
     //cursor.limit(50)
     cursor.addCursorFlag("noCursorTimeout",true)
     //console.log(cursor)
-
-
-    
-
-
     cursor.on('data', async (ip) => {
 
         const currentIP = ip.ip
@@ -117,17 +112,15 @@ const process_data = async () => {
         try {
                 for (var j = 0; j < splitted.length; j++) {
                     const line = splitted[j]
+
+
                     /*
                     blockowner = ""
                     netRange = ""
                     ASN = ""
                     descr = ""*/
 
-
-
                     if( netRange === "" && line.includes("inetnum:")) {
-
-                        //console.log( JSON.parse( JSON.stringify( line.replace(/[(inetnum:) \t]/gi,"") ) ) )
                         netRange = line.replace(/^(inetnum:)/i,"").replace(/[ \s]/gi,"").replace("-"," - ")
                         console.log( netRange )
                     } else if( descr === "" && line.includes("descr:")) {
@@ -145,17 +138,15 @@ const process_data = async () => {
                         blockowner = line.replace(/^(netName:)/i,"").replace(/^(NetName:)/i,"").replace(/[ \s]/gi,"")
                         console.log( blockowner )
                     }
-                    
-
                 }   
 
-            let result = await IpDB.updateOne({ "ip": ip.ip }
+            let result = await IpDB.updateOne({ "ip": currentIP }
              ,{$set:{
                 blockowner,
                 ASN,
                 descr,
                 netRange,
-                splitted
+                output: ""
              }},
               {upsert:false}
             ).exec()
