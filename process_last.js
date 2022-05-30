@@ -91,42 +91,57 @@ const process_data = async () => {
     cursor.addCursorFlag("noCursorTimeout",true)
     //console.log(cursor)
 
-    const digCommand = `whois ${ ip.ip }`
-    const output = execSync( digCommand, { encoding: 'utf-8' }); // the default is 'buffer'
 
-    const splitted = output.split(/\r?\n/)
-
-    let blockowner = ""
-    let netRange = ""
-    let ASN = ""
-    let descr = ""
+    
 
 
     cursor.on('data', async (ip) => {
 
+        const currentIP = ip.ip
+
+        const digCommand = `whois ${ currentIP }`
+        const output = execSync( digCommand, { encoding: 'utf-8' }); // the default is 'buffer'
+
+
+        const splitted = output.split(/\r?\n/)
+
+        let blockowner = ""
+        let netRange = ""
+        let ASN = ""
+        let descr = ""
+
         index++
+        console.log("///////////////////////////////////////")
+        console.log(currentIP)
 
         try {
                 for (var j = 0; j < splitted.length; j++) {
                     const line = splitted[j]
+                    /*
                     blockowner = ""
                     netRange = ""
                     ASN = ""
-                    descr = ""
+                    descr = ""*/
 
-                    if(line.includes("inetnum:")) {
+
+
+                    if( netRange === "" && line.includes("inetnum:")) {
 
                         //console.log( JSON.parse( JSON.stringify( line.replace(/[(inetnum:) \t]/gi,"") ) ) )
                         netRange = line.replace(/^(inetnum:)/i,"").replace(/[ \s]/gi,"").replace("-"," - ")
                         console.log( netRange )
-                    } else if(line.includes("descr:")) {
+                    } else if( descr === "" && line.includes("descr:")) {
                         //console.log( "Descr" ,line.replace(/[(descr:) \t]/i,"") )
                         descr = line.replace(/^(descr:)/i,"").replace(/[ \s]/gi,"")
                         console.log(descr)
-                    } else if(line.includes("origin:") || line.includes("OriginAS:") ) {
+                    }else if( descr === "" && line.includes("Organization:")) {
+                        //console.log( "Descr" ,line.replace(/[(descr:) \t]/i,"") )
+                        descr = line.replace(/^(Organization:)/i,"").replace(/[ \s]/gi,"")
+                        console.log(descr)
+                    } else if(ASN === "" && (line.includes("origin:") || line.includes("OriginAS:")) ) {
                         ASN = line.replace(/^(origin:)/i,"").replace(/^(OriginAS:)/i,"").replace(/[ \s]/gi,"")
                         console.log( ASN )
-                    }  else if(line.includes("netName:") || line.includes("NetName:") ) {
+                    }  else if(blockowner === "" && (line.includes("netName:") || line.includes("NetName:")) ) {
                         blockowner = line.replace(/^(netName:)/i,"").replace(/^(NetName:)/i,"").replace(/[ \s]/gi,"")
                         console.log( blockowner )
                     }
@@ -140,7 +155,7 @@ const process_data = async () => {
                 ASN,
                 descr,
                 netRange,
-                output
+                splitted
              }},
               {upsert:false}
             ).exec()
