@@ -139,7 +139,8 @@ const process_data = async () => {
                 blockowner,
                 ASN,
                 descr,
-                netRange
+                netRange,
+                output
              }},
               {upsert:false}
             ).exec()
