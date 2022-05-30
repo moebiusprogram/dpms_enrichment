@@ -14,16 +14,12 @@ let DomainDB = null
 let IpDB = null
 
 
-
 function ValidateIPaddress(str){
   // Regular expression to check if string is a IP address
   const regexExp = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/gi;
 
   return regexExp.test(str);
 }
-
-
-
 
 
 /* Start Mongoose */
@@ -58,7 +54,6 @@ connectMongoose = async () => {
         console.log(users)
 
         process_data()
-        
 
     }).catch(err => {
         console.log('Error connecting with local database.Exiting', err)
@@ -120,12 +115,18 @@ const process_subfinder = async (data) => {
 }
 
 
-
 const process_data = async () => {
 
     //await DomainDB.find().then(  )
 
-    for await (const domain of DomainDB.find()) {
+
+    const cursor = DomainDB.find().cursor()
+
+    //cursor.limit(50)
+    cursor.addCursorFlag("noCursorTimeout",true)
+    //console.log(cursor)
+
+    cursor.on('data', async (domain) => {
 
         index++
 
@@ -169,12 +170,4 @@ const process_data = async () => {
         } catch (e) {
             console.log(e)
         }
-    }
-
-
-    /*
-    let result = await DomainDB.update({ "domainName": { "$regex": this.term, "$options": "i" } }
-         ,{$addToSet:{"tags": this.term }},
-          {upsert:false, multi:true}
-        ).exec()*/
 }
