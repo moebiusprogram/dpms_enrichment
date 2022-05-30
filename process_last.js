@@ -91,7 +91,7 @@ const process_data = async () => {
     cursor.addCursorFlag("noCursorTimeout",true)
     //console.log(cursor)
 
-    const digCommand = `whois 195.149.84.101`
+    const digCommand = `whois ${ ip.ip }`
     const output = execSync( digCommand, { encoding: 'utf-8' }); // the default is 'buffer'
 
     const splitted = output.split(/\r?\n/)
